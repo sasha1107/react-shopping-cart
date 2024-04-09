@@ -14,11 +14,13 @@ const Button = ({
   htmlType = "button",
   type = "default",
   block = false,
+  disabled,
   ...props
 }: ButtonProps) => {
   return (
     <button
       {...props}
+      disabled={disabled}
       type={htmlType}
       className={twMerge(
         "text-white rounded-md px-4 py-2 transition-colors hover:brightness-105 disabled:opacity-40 flex justify-center items-center",
@@ -27,7 +29,8 @@ const Button = ({
           type === "secondary" && "bg-secondary-400 text-white",
           type === "default" &&
             "bg-white border text-gray-500 hover:border-primary-400 hover:text-primary-400",
-          block && "w-full"
+          block && "w-full",
+          disabled && "cursor-not-allowed"
         ),
         className
       )}

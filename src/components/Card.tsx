@@ -2,14 +2,13 @@ import Cart from "@/assets/cart.svg?react";
 import { useRef } from "react";
 import { usePostCarts } from "@/api";
 import { Modal, Button, LinkButton } from "@/components";
-
 import type { IProduct } from "@/types";
 import type { ModalRef } from "@/components";
 
 const Card = (props: IProduct) => {
   const modalRef = useRef<ModalRef | null>(null);
   const { name, imageUrl, price } = props;
-  const { mutate: addCart } = usePostCarts();
+  const { mutate: addCart } = usePostCarts(modalRef.current?.open);
 
   return (
     <>
@@ -33,7 +32,6 @@ const Card = (props: IProduct) => {
             onClick={(e) => {
               e.preventDefault();
               addCart(props);
-              modalRef.current?.open();
             }}
           >
             <Cart />

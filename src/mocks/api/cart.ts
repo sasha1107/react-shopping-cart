@@ -1,40 +1,72 @@
 import { HttpResponse, delay } from "msw";
 import { pagination } from "@/utils";
-// import { groupByProductId } from "@/utils/cart";
+import { addToCart, getCartData, deleteProductFromCart } from "@/utils/cart";
 import type { ICart, IProduct } from "@/types";
 
 const getCarts = async (page: number, limit: number) => {
-  const cartData = localStorage.getItem("cart") || "[]";
-  const parsedCartData = JSON.parse(cartData);
   try {
-    const paginatedData = pagination<ICart>(parsedCartData, page, limit);
-    // const groupByProduct = groupByProductId(paginatedData);
-    await delay(1000);
-    return HttpResponse.json(paginatedData);
-  } catch (error) {
-    return new HttpResponse("Failed to fetch cart items", {
-      status: 500,
+    const cartData = getCartData();
+    const paginatedData = pagination<ICart>(cartData, page, limit);
+
+    await delay(500);
+    return HttpResponse.json({
+      ok: true,
+      data: paginatedData,
+      page: {
+        total: cartData.length,
+        page,
+        limit,
+      },
     });
+  } catch (error) {
+    return HttpResponse.error();
   }
 };
 
-const addToCart = async (product: IProduct) => {
-  const newItem = {
-    id: window.crypto.randomUUID(),
-    product,
-  };
-  const cartData = localStorage.getItem("cart") || "[]";
-  const parsedCartData = JSON.parse(cartData);
+const postCart = async (product: IProduct) => {
   try {
-    const newCart = [...parsedCartData, newItem];
-    localStorage.setItem("cart", JSON.stringify(newCart));
-    await delay(1000);
-    return HttpResponse.json(newItem);
+    addToCart(product);
+    await delay(500);
+    return HttpResponse.json(
+      {
+        data: product,
+        code: "ITEM_ADDED_TO_CART",
+        ok: true,
+      },
+      { status: 200 }
+    );
   } catch (error) {
-    return new HttpResponse("Failed to add item to cart", {
-      status: 500,
+    return HttpResponse.error();
+  }
+};
+const changeQuantity = async (productId: IProduct["id"], quantity: number) => {
+  try {
+    const cartData = getCartData();
+    const updatedData = cartData.map((item) => {
+      if (item.product.id === productId) {
+        return { ...item, quantity };
+      }
+      return item;
     });
+
+    localStorage.setItem("cart", JSON.stringify(updatedData));
+    await delay(500);
+    return HttpResponse.json({
+      ok: true,
+      data: updatedData.find((item) => item.product.id === productId),
+    });
+  } catch (error) {
+    return HttpResponse.error();
+  }
+};
+const deleteCartItem = async (productId: IProduct["id"]) => {
+  try {
+    deleteProductFromCart(productId);
+    await delay(500);
+    return HttpResponse.json(productId);
+  } catch (error) {
+    return HttpResponse.error();
   }
 };
 
-export { getCarts, addToCart };
+export { getCarts, postCart, deleteCartItem, changeQuantity };

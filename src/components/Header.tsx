@@ -1,14 +1,10 @@
 import Cart from "@/assets/cart.svg?react";
 import { Link, useLocation } from "react-router-dom";
 import { twJoin, twMerge } from "tailwind-merge";
-import { Count } from "@/components";
-import { cartAtom } from "@/atoms";
-import { useAtomValue } from "jotai";
 import type { ComponentProps } from "react";
 
 const Header = (props: ComponentProps<"header">) => {
   const { className } = props;
-  const cart = useAtomValue(cartAtom);
   const location = useLocation();
   return (
     <header
@@ -28,17 +24,15 @@ const Header = (props: ComponentProps<"header">) => {
         <nav>
           <ul className="flex gap-4">
             <li>
-              <Count count={cart.length}>
-                <Link
-                  to="/cart"
-                  className={twJoin(
-                    "underline-offset-2",
-                    location.pathname === "/cart" && "underline"
-                  )}
-                >
-                  장바구니
-                </Link>
-              </Count>
+              <Link
+                to="/cart"
+                className={twJoin(
+                  "underline-offset-2",
+                  location.pathname === "/cart" && "underline"
+                )}
+              >
+                장바구니
+              </Link>
             </li>
             <li>
               <Link

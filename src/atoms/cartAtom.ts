@@ -1,6 +1,6 @@
 import { ICart } from "@/types/cart";
-import { atomWithStorage } from "jotai/utils";
+import { atom } from "jotai";
 
-const cartAtom = atomWithStorage<ICart[]>("cart", []);
+const selectedCartAtom = atom<ICart[]>([]);
 
-export default cartAtom;
+export default selectedCartAtom;

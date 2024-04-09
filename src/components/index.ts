@@ -10,6 +10,7 @@ import Checkbox from "./Checkbox";
 import Footer from "./Footer";
 import Button from "./Button";
 import LinkButton from "./LinkButton";
+import TotalPrice from "./TotalPrice";
 
 export {
   Provider,
@@ -23,5 +24,6 @@ export {
   Footer,
   Button,
   LinkButton,
+  TotalPrice,
 };
 export type { ModalRef };

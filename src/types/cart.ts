@@ -1,6 +1,7 @@
-import { IProduct } from "./product";
+import type { IProduct } from "./product";
 
-export interface ICart {
+export type ICart = {
   id: string;
   product: IProduct;
-}
+  quantity: number;
+};

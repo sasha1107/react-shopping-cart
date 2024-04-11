@@ -1,6 +1,7 @@
 import React from "react";
 import ReactDOM from "react-dom/client";
 import { RouterProvider } from "react-router-dom";
+import { OverlayProvider } from "near-payments";
 import router from "./router";
 import "./index.css";
 import { worker } from "@/mocks/browser";
@@ -15,6 +16,8 @@ worker.start(workerStartOptions);
 
 ReactDOM.createRoot(document.getElementById("root")!).render(
   <React.StrictMode>
-    <RouterProvider router={router} />
+    <OverlayProvider>
+      <RouterProvider router={router} />
+    </OverlayProvider>
   </React.StrictMode>
 );
